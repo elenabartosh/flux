@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Login from '../components/Login.jsx';
+import ViewPort from '../components/ViewPort.jsx';
 import Config from '../config/config.js';
 import FluxSdk from 'flux-sdk-node';
 import FluxHelpers from 'flux-sdk-helpers';
@@ -43,7 +44,11 @@ class App extends Component {
       <div className='App'>
         <div>
           {userLoggedIn ? (
-            <button onClick={this.handleLogout}>Logout</button>
+            <div>
+              <button onClick={this.handleLogout}>Logout</button>
+              <ViewPort/>
+            </div>
+
           ) : (
             <Login handleLogin={this.handleLogin} />
         )}
