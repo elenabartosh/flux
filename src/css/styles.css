@@ -1,0 +1,31 @@
+.App {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+.Login {
+  position: absolute;
+  top: 35%;
+  left: 35%;
+  height: 100%;
+  width: 100%;
+  vertical-align: middle;
+}
+
+.Login-form {
+  height: 450px;
+  width: 450px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.Login-field {
+  text-align: left;
+}
+
+#loginbutton {
+  background-color: #4ebf9c;
+  width: 100%;
+}
+
