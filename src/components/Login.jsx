@@ -1,28 +1,27 @@
 import React from 'react'
 import { Button, Form } from 'semantic-ui-react'
 
-const Login = () => (
-  <div className='Login'>
-  <Form className='Login-form'>
-    <Form.Field className='Login-field'>
-      <label>Login</label>
-      <Form.Input
-        icon='user'
-        iconPosition='left'
-        placeholder='Login'/>
-    </Form.Field>
-    <Form.Field className='Login-field'>
-      <label>Password</label>
-      <Form.Input 
-        icon='lock'
-        iconPosition='left'
-        placeholder='Password'
-        type='password'/>
-    </Form.Field>
-    <Button id='loginbutton' type='submit'>Login</Button>
-  </Form>
-  </div>
-)
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLogin = this.handleLogin.bind(this);
+  }
 
-export default Login
+  handleLogin(event) {
+    this.props.handleLogin(event);
+  }
+
+  render() {
+    return (
+      <div className='Login'>
+      <Form className='Login-form'>
+        <Button id='loginbutton' type='submit' onClick={this.handleLogin}>Login with Flux</Button>
+      </Form>
+      </div>
+    );
+  }
+
+}
+
+export default Login;
 
