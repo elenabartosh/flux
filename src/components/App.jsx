@@ -37,28 +37,33 @@ class App extends Component {
 
   handleLogout(event) {
     helpers.logout();
+    this.setState({userLoggedIn: false});
   }
 
   render() {
     const userLoggedIn = this.state.userLoggedIn;
     console.log('render userLoggedIn', userLoggedIn);
-    return (
-      <div className='App'>
-        <div>
-          {userLoggedIn ? (
-            <div>
-              <button onClick={this.handleLogout}>Logout</button>
-              <ViewPort/>
+    return (<div className='App'>{userLoggedIn ? (
+              <div className='App'>
+                <div id='header'>
+                  <div id='title'>
+                    <h1>FLUX</h1>
+                    <h2>Seed Project</h2>
+                  </div>
+                <div id='actions'>
+                  <button id='logout' onClick={this.handleLogout}>Logout</button>
+                </div>
+              </div>
+              <div id='viewport'><ViewPort/></div>
             </div>
-
           ) : (
-            <Login handleLogin={this.handleLogin} />
+            <div><Login handleLogin={this.handleLogin} /></div>
         )}
         </div>
-      </div>
     );
   }
 }
+
 
 export default App;
 
