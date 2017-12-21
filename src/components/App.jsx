@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Login from '../components/Login.jsx';
 import ViewPort from '../components/ViewPort.jsx';
 import Config from '../config/config.js';
-import FluxSdk from 'flux-sdk-node';
+import FluxSdk from 'flux-sdk-browser';
 import FluxHelpers from 'flux-sdk-helpers';
 
 var sdk = new FluxSdk(Config.flux_client_id, { redirectUri: Config.url, fluxUrl: Config.flux_url });
