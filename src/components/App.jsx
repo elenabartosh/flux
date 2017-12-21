@@ -18,20 +18,21 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  isUserLoggedIn() {
-    return window.location.search.search(/flux_token/) !== -1
-  }
-
   componentWillMount() {
-    // helpers.isLoggedIn()
-    // .then((results) => {console.log(results)});
-    if (this.isUserLoggedIn()) {
-      this.setState({userLoggedIn: true});
-    }
+    helpers.storeFluxUser()
+    .then(() => { return helpers.isLoggedIn() })
+    .then((isLoggedIn) => {
+      if (isLoggedIn) {
+        console.log('helpers.isLoggedIn() returns true');
+        this.setState({userLoggedIn: true});
+      } else {
+        console.log('helpers.isLoggedIn() returns false');
+      }
+    })
   }
 
   handleLogin(event) {
-    helpers.login();
+    helpers.redirectToFluxLogin();
   }
 
   handleLogout(event) {
@@ -40,6 +41,7 @@ class App extends Component {
 
   render() {
     const userLoggedIn = this.state.userLoggedIn;
+    console.log('render userLoggedIn', userLoggedIn);
     return (
       <div className='App'>
         <div>
