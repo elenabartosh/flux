@@ -29,7 +29,6 @@ class ViewPort extends React.Component {
   }
 
   render() {
-    console.log('render ViewPort', this.props.projectData);
     return (
       <div id='content'>
         <div className='column'>

@@ -27,6 +27,17 @@ class App extends Component {
     this.handleCellChange = this.handleCellChange.bind(this);
   }
 
+  resetState() {
+    this.setState({
+      user: undefined,
+      userLoggedIn: false,
+      userProjects: [],
+      selectedProject: null,
+      projectCells: [],
+      selectedCell: null,
+      projectData: null
+    });
+  }
   componentWillMount() {
     var user;
     var userLoggedIn;
@@ -59,7 +70,7 @@ class App extends Component {
 
   handleLogout(event) {
     helpers.logout();
-    this.setState({userLoggedIn: false, user: undefined, userProjects: []});
+    this.resetState();
   }
 
   handleProjectChange(event) {
@@ -68,13 +79,13 @@ class App extends Component {
       var selectedProject = filteredProjects[0];
       this.getCells(selectedProject)
       .then((data) => {
-        this.setState({selectedProject: selectedProject, projectCells: data.entities});
+        this.setState({selectedProject: selectedProject, projectCells: data.entities, selectedCell: null, projectData: null});
       })
       .catch((error) => {
         console.error('App.handleProjectChange error', error);
       })
     } else {
-      this.setState({selectedProject: null, projectCells: []});
+      this.setState({selectedProject: null, projectCells: [], selectedCell: null, projectData: null});
     }
   }
 
@@ -85,7 +96,9 @@ class App extends Component {
       if (this.state.selectedProject && selectedCell) {
         this.getValue(this.state.selectedProject, selectedCell)
         .then((data) => {
-          this.setState({selectedCell: selectedCell, projectData: data.value});
+          console.log('handleCellChange', data.value);
+          var geometryData = this.getGeometryData(data.value);
+          this.setState({selectedCell: selectedCell, projectData: geometryData});
         })
         .catch((error) => {
           console.error('App.handleCellChange error', error);
@@ -94,8 +107,27 @@ class App extends Component {
         this.setState({projectData: null});
       }
     } else {
-      this.setState({selectedCell: null});
+      this.setState({selectedCell: null, projectData: null});
     }
+  }
+
+  getGeometryData(data) {
+    var geometryData = [];
+    if (Array.isArray(data)) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].primitive === 'revitElement') {
+          geometryData = geometryData.concat(data[i].geometryParameters.geometry);
+        }
+        else {
+          geometryData = geometryData.concat(data[i]);
+        }
+      }
+    } else {
+      if (typeof data === 'object') {
+        geometryData.push(data);
+      }
+    }
+    return geometryData;
   }
 
   getUser() {
