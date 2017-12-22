@@ -24,16 +24,28 @@ body {
   -webkit-box-pack: center;
 }
 
-/*div {
-  height: 100%;
-}*/
-
-/*#app {
-  height: 100%;
-}
-*/
 .App {
   height: 90%;
+}
+
+.Login {
+  height: 100%;
+  background-image: url("../assets/frontpage.jpg");
+  background-repeat: no-repeat;
+  background-size:100% 100%;
+  text-align: right;
+}
+
+#loginbutton {
+  background-color: #0fbfd6;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 12px;
 }
 
 #viewport {
@@ -173,7 +185,7 @@ body {
 #actions {
   padding: 2em;
   align-items: center;
-  width: 46%;
+  width: 45%;
   display: flex;
 }
 
@@ -195,7 +207,7 @@ body {
   height:100%;
 }
 
-#logout, #create .button {
+#create .button {
   display: flex;
   align-items: center;
   height: 100%;
@@ -209,6 +221,20 @@ body {
   font-size: 1.4em;
   transition: background 0.2s ease-in-out;
 }
+
+#logout {
+  display: flex;
+  font-size: 1.5em;
+  padding: 1.5em;
+  border-radius: 12px;
+  background: #999;
+  opacity: 0.8;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 8px 1px #bbb;
+  transition: opacity 0.2s ease-in-out;
+}
+
 
 #logout:hover, #create .button:hover {
   background: #e8e8e8;
@@ -230,9 +256,10 @@ body {
   overflow: hidden; 
   position: relative;
   display: block;
+  border-radius: 12px;
 }
 
-select{       
+select {       
   cursor: pointer;
   border: 0;
   color:#999;
@@ -275,7 +302,7 @@ select{
 #login .button {
   font-size: 3em;
   padding: 1.5em;
-  border-radius: 10px;
+  border-radius: 12px;
   background: #0fbfd6;
   opacity: 0.8;
   text-transform: uppercase;
@@ -321,9 +348,10 @@ select{
 
 select {
   width: 100%;
-  font-size: 1.8em;
+  font-size: 1.5em;
   padding: 0.5em;
   border-color: #e8e8e8;
+  border-radius: 12px;
 }
 
 /* range slider */
