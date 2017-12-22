@@ -177,23 +177,25 @@ class App extends Component {
                   {this.state.userProjects.map((item) => {
                     return <option key={item.id} value={item.id}>{item.name}</option>
                   })}
-                </select></div>
-              <div id='logout'>
-                <button onClick={this.handleLogout}>Logout</button>
+                </select>
+              </div>
+              <div className='select'>
+                <select onChange={this.handleCellChange}>
+                  <option key='notselected' value='notselected'>Please select a cell</option>
+                  {this.state.projectCells.map((cell) => {
+                  return <option key={cell.id} value={cell.id}>{cell.label}</option>
+                })}
+                </select>
+              </div>
+              <div>
+                <button id='logout' type='submit' onClick={this.handleLogout}>Logout</button>
               </div>
             </div>
           </div>
           <div id='viewport'><ViewPort projectData={this.state.projectData}/></div>
-          <div className='select'>
-            <select className='cell' onChange={this.handleCellChange}>
-              <option key='notselected' value='notselected'>Please select a cell</option>
-              {this.state.projectCells.map((cell) => {
-                return <option key={cell.id} value={cell.id}>{cell.label}</option>
-              })}
-            </select></div>
           </div>
         ) : (
-          <div>
+          <div className='Login'>
             <Login handleLogin={this.handleLogin} />
           </div>
         )}
