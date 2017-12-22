@@ -15,12 +15,16 @@ class App extends Component {
       user: undefined,
       userLoggedIn: false,
       userProjects: [],
-      projectCells: []
+      selectedProject: null,
+      projectCells: [],
+      selectedCell: null,
+      projectData: null
     };
     this.dataTables = {}
-    this.handleProjectChange = this.handleProjectChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleProjectChange = this.handleProjectChange.bind(this);
+    this.handleCellChange = this.handleCellChange.bind(this);
   }
 
   componentWillMount() {
@@ -28,22 +32,24 @@ class App extends Component {
     var userLoggedIn;
     var userProjects;
     helpers.storeFluxUser()
-    .then(() => { return helpers.isLoggedIn() })
+    .then(() => { return helpers.isLoggedIn(); })
     .then((isLoggedIn) => {
       if (isLoggedIn) {
         user = helpers.getUser();
         userLoggedIn = true;
         return user.listProjects();
       } else {
-        return Promise.resolve()
+        return Promise.resolve();
       }
     })
     .then((data) => {
       if (data !== undefined) {
         userProjects = data.entities;
         this.setState({user, userLoggedIn, userProjects});
-        console.log(this.state);
       }
+    })
+    .catch((error) => {
+      console.error('App.componentWillMount error', error);
     })
   }
 
@@ -57,14 +63,38 @@ class App extends Component {
   }
 
   handleProjectChange(event) {
-    console.log('handleProjectChange');
-    var filteredProjects = this.state.userProjects.filter((p) => { return p.id === event.target.value });
+    var filteredProjects = this.state.userProjects.filter((p) => { return p.id === event.target.value; });
     if (filteredProjects.length > 0) {
       var selectedProject = filteredProjects[0];
       this.getCells(selectedProject)
       .then((data) => {
-        this.setState({projectCells: data.entities});
+        this.setState({selectedProject: selectedProject, projectCells: data.entities});
       })
+      .catch((error) => {
+        console.error('App.handleProjectChange error', error);
+      })
+    } else {
+      this.setState({selectedProject: null, projectCells: []});
+    }
+  }
+
+  handleCellChange(event) {
+    var filteredCells = this.state.projectCells.filter((c) => { return c.id === event.target.value; })
+    if (filteredCells.length > 0) {
+      var selectedCell = filteredCells[0];
+      if (this.state.selectedProject && selectedCell) {
+        this.getValue(this.state.selectedProject, selectedCell)
+        .then((data) => {
+          this.setState({selectedCell: selectedCell, projectData: data.value});
+        })
+        .catch((error) => {
+          console.error('App.handleCellChange error', error);
+        })
+      } else {
+        this.setState({projectData: null});
+      }
+    } else {
+      this.setState({selectedCell: null});
     }
   }
 
@@ -89,9 +119,16 @@ class App extends Component {
     return this.getDataTable(project).table.listCells();
   }
 
+  getCell(project, cell) {
+    return this.getDataTable(project).table.getCell(cell.id);
+  }
+
+  getValue(project, cell) {
+    return this.getCell(project, cell).fetch();
+  }
+
   render() {
     const userLoggedIn = this.state.userLoggedIn;
-    console.log('render userLoggedIn', userLoggedIn);
     return (
       <div className='App'>
         { userLoggedIn ? (
@@ -114,9 +151,9 @@ class App extends Component {
               </div>
             </div>
           </div>
-          <div id='viewport'><ViewPort/></div>
+          <div id='viewport'><ViewPort projectData={this.state.projectData}/></div>
           <div className='select'>
-            <select className='cell'>
+            <select className='cell' onChange={this.handleCellChange}>
               <option key='notselected' value='notselected'>Please select a cell</option>
               {this.state.projectCells.map((cell) => {
                 return <option key={cell.id} value={cell.id}>{cell.label}</option>
