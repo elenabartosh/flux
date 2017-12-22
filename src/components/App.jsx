@@ -12,21 +12,34 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userLoggedIn: false
+      user: undefined,
+      userLoggedIn: false,
+      userProjects: []
     };
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentWillMount() {
+    var user;
+    var userLoggedIn;
+    var userProjects;
     helpers.storeFluxUser()
     .then(() => { return helpers.isLoggedIn() })
     .then((isLoggedIn) => {
       if (isLoggedIn) {
-        console.log('helpers.isLoggedIn() returns true');
-        this.setState({userLoggedIn: true});
+        user = helpers.getUser();
+        userLoggedIn = true;
+        return user.listProjects();
       } else {
-        console.log('helpers.isLoggedIn() returns false');
+        return Promise.resolve()
+      }
+    })
+    .then((data) => {
+      if (data !== undefined) {
+        userProjects = data.entities;
+        this.setState({user, userLoggedIn, userProjects});
+        console.log(this.state);
       }
     })
   }
@@ -37,7 +50,7 @@ class App extends Component {
 
   handleLogout(event) {
     helpers.logout();
-    this.setState({userLoggedIn: false});
+    this.setState({userLoggedIn: false, user: undefined, userProjects: []});
   }
 
   render() {
@@ -51,7 +64,13 @@ class App extends Component {
                     <h2>Seed Project</h2>
                   </div>
                 <div id='actions'>
-                  <button id='logout' onClick={this.handleLogout}>Logout</button>
+                  <div className='select'><select className='project'>
+                  <option key='notselected' value='notselected'>Please select a project</option>
+                  {this.state.userProjects.map((item) => {
+                    return <option key={item.id} value={item.id}>{item.name}</option>
+                  })}
+                  </select></div>
+                  <div id='logout'><button onClick={this.handleLogout}>Logout</button></div>
                 </div>
               </div>
               <div id='viewport'><ViewPort/></div>
