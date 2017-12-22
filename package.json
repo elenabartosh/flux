@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "flux-sdk-browser": "^0.5.2",
     "flux-sdk-helpers": "^0.1.2",
     "flux-sdk-node": "^0.5.2",
     "react": "^16.2.0",
